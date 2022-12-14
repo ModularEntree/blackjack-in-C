@@ -3,6 +3,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdbool.h>
+#include <raylib.h>
 #define MAX_SIZE 10
 #define TRUE true
 
