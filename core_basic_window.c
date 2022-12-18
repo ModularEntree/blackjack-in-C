@@ -14,6 +14,13 @@
 ********************************************************************************************/
 
 #include <raylib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <stdbool.h>
+
+
 
 //----------------------------------------------------------------------------------
 // Global Variables Definition
@@ -21,10 +28,27 @@
 int screenWidth = 1280;
 int screenHeight = 720;
 
+typedef struct Cards {
+    Texture2D cA;
+    Texture2D c2;
+    Texture2D c3;
+    Texture2D c4;
+    Texture2D c5;
+    Texture2D c6;
+    Texture2D c7;
+    Texture2D c8;
+    Texture2D c9;
+    Texture2D c10;
+    Texture2D cK;
+    Texture2D backface;
+}Cards;
+
+const char *cards[13] = {"ace_H", "Two_H", "Three_H", "Four_H", "Five_H", "Six_H", "Seven_H", "Eight_H", "Nine_H", "Ten_H", "Jack_H", "Queen_H", "King_H"};
+
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Texture2D Tcheckerboard);     // Update and Draw one frame
+void UpdateDrawFrame(Cards checkerboard);     // Update and Draw one frame
 
 //----------------------------------------------------------------------------------
 // Main Enry Point
@@ -32,10 +56,30 @@ void UpdateDrawFrame(Texture2D Tcheckerboard);     // Update and Draw one frame
 int main()
 {
     // Initialization
+    srand(time(NULL));
+
+    InitWindow(screenWidth, screenHeight, "Blackjack");
+
+    Cards deck;
+    deck.cA = LoadTexture("../img/ace_H.png");
+    deck.c2 = LoadTexture("../img/Two_H.png");
+    deck.c3 = LoadTexture("../img/Three_H.png");
+    deck.c4 = LoadTexture("../img/Four_H.png");
+    deck.c5 = LoadTexture("../img/Five_H.png");
+    deck.c6 = LoadTexture("../img/Six_H.png");
+    deck.c7 = LoadTexture("../img/Seven_H.png");
+    deck.c8 = LoadTexture("../img/Eight_H.png");
+    deck.c9 = LoadTexture("../img/Nine_H.png");
+    deck.c10 = LoadTexture("../img/Ten_H.png");
+    deck.backface = LoadTexture("../img/backface.png");
+    deck.cK = LoadTexture("../img/King_H.png");
+
     //--------------------------------------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     //LoadFontFromImage((image){"resources/alagard.png"});
-    Texture2D Tcheckerboard = LoadTexture("../img/Sedma.png");
+
+    Image Icon = LoadImage("../img/Blackjack-icon.png");
+
+    SetWindowIcon(Icon);
 
 
 
@@ -45,12 +89,12 @@ int main()
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        UpdateDrawFrame(Tcheckerboard);
+        UpdateDrawFrame(deck);
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadTexture(Tcheckerboard);
+    UnloadTexture(deck.cA);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -61,7 +105,7 @@ int main()
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Texture2D Tcheckerboard)
+void UpdateDrawFrame(Cards Tcheckerboard)
 {
     // Update
     //----------------------------------------------------------------------------------
@@ -73,6 +117,7 @@ void UpdateDrawFrame(Texture2D Tcheckerboard)
     BeginDrawing();
 
         ClearBackground(DARKERGREEN);
+
 /*
     DrawCircle(screenWidth/4, screenHeight/2, 50, DARKBROWN);
 DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
@@ -84,8 +129,12 @@ DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 
     DrawText("W", 2*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 */
-    DrawTextureV(Tcheckerboard,(Vector2) {screenWidth/1.5-Tcheckerboard.width, screenHeight/1.5-Tcheckerboard.height}, WHITE);
-        //DrawTextureRec(Tcheckerboard, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
+    DrawTextureEx(Tcheckerboard.cA,(Vector2) {3.5*screenWidth/9, 50},0 ,0.69 , WHITE);
+    DrawTextureEx(Tcheckerboard.c10,(Vector2) {4.5*screenWidth/9, 50},0 ,0.69 , WHITE);
+    //DrawTextureRec(Tcheckerboard, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
+    DrawTextureEx(Tcheckerboard.backface,(Vector2) {4*screenWidth/16, 450},0 ,1 , WHITE);
+    DrawTextureEx(Tcheckerboard.c9,(Vector2) {7*screenWidth/16, 450},0 ,1 , WHITE);
+    DrawTextureEx(Tcheckerboard.cK,(Vector2) {10*screenWidth/16, 450},0 ,1 , WHITE);
 
 
 
