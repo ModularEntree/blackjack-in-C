@@ -17,7 +17,7 @@ typedef struct karta{
     char nazev[MAX_SIZE];
 } Karta;
 
-
+/*
 int main() {
     srand(time(NULL));
     Karta eso;
@@ -89,3 +89,4 @@ int main() {
     }
     return 0;
 }
+*/

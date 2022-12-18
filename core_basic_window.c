@@ -15,20 +15,16 @@
 
 #include <raylib.h>
 
-#if defined(PLATFORM_WEB)
-    #include <emscripten/emscripten.h>
-#endif
-
 //----------------------------------------------------------------------------------
 // Global Variables Definition
 //----------------------------------------------------------------------------------
-int screenWidth = 800;
-int screenHeight = 450;
+int screenWidth = 1280;
+int screenHeight = 720;
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(void);     // Update and Draw one frame
+void UpdateDrawFrame(Texture2D Tcheckerboard);     // Update and Draw one frame
 
 //----------------------------------------------------------------------------------
 // Main Enry Point
@@ -39,24 +35,25 @@ int main()
     //--------------------------------------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
     //LoadFontFromImage((image){"resources/alagard.png"});
+    Texture2D Tcheckerboard = LoadTexture("../img/Sedma.png");
 
-#if defined(PLATFORM_WEB)
-    emscripten_set_main_loop(UpdateDrawFrame, 0, 1);
-#else
+
+
     SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        UpdateDrawFrame();
+        UpdateDrawFrame(Tcheckerboard);
     }
-#endif
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    UnloadTexture(Tcheckerboard);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
+
 
     return 0;
 }
@@ -64,7 +61,7 @@ int main()
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(void)
+void UpdateDrawFrame(Texture2D Tcheckerboard)
 {
     // Update
     //----------------------------------------------------------------------------------
@@ -76,16 +73,23 @@ void UpdateDrawFrame(void)
     BeginDrawing();
 
         ClearBackground(DARKERGREEN);
-
+/*
     DrawCircle(screenWidth/4, screenHeight/2, 50, DARKBROWN);
 DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
     DrawCircle(3*screenWidth/4, screenHeight/2, 50, DARKBROWN);
     DrawText("O", 3*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
     DrawCircle(2*screenWidth/4, screenHeight/2, 50, DARKBROWN);
 
-    DrawRectangleRounded((Rectangle){screenWidth/2-100, screenHeight/2-25, 200, 50}, 0.2, 10, DARKBROWN);
+    DrawRectangleRounded((Rectangle){screenWidth/2-100, screenHeight/2-25, 200, 50}, 0.5, 10, DARKBROWN);
 
     DrawText("W", 2*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
-    EndDrawing();
+*/
+    DrawTextureV(Tcheckerboard,(Vector2) {screenWidth/1.5-Tcheckerboard.width, screenHeight/1.5-Tcheckerboard.height}, WHITE);
+        //DrawTextureRec(Tcheckerboard, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
+
+
+
+
+        EndDrawing();
     //----------------------------------------------------------------------------------
 }
