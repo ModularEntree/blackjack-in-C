@@ -40,7 +40,8 @@ typedef struct Cards {
     Texture2D c9;
     Texture2D c10;
     Texture2D cK;
-    Texture2D backface;
+    Texture2D backfaceB;
+    Texture2D backfaceR;
 }Cards;
 
 const char *cards[13] = {"ace_H", "Two_H", "Three_H", "Four_H", "Five_H", "Six_H", "Seven_H", "Eight_H", "Nine_H", "Ten_H", "Jack_H", "Queen_H", "King_H"};
@@ -71,7 +72,8 @@ int main()
     deck.c8 = LoadTexture("../img/Eight_H.png");
     deck.c9 = LoadTexture("../img/Nine_H.png");
     deck.c10 = LoadTexture("../img/Ten_H.png");
-    deck.backface = LoadTexture("../img/backface.png");
+    deck.backfaceB = LoadTexture("../img/backfaceB.png");
+    deck.backfaceR = LoadTexture("../img/backfaceR.png");
     deck.cK = LoadTexture("../img/King_H.png");
 
     //--------------------------------------------------------------------------------------
@@ -130,9 +132,9 @@ DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
     DrawText("W", 2*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 */
     DrawTextureEx(Tcheckerboard.cA,(Vector2) {3.5*screenWidth/9, 50},0 ,0.69 , WHITE);
-    DrawTextureEx(Tcheckerboard.c10,(Vector2) {4.5*screenWidth/9, 50},0 ,0.69 , WHITE);
-    //DrawTextureRec(Tcheckerboard, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
-    DrawTextureEx(Tcheckerboard.backface,(Vector2) {4*screenWidth/16, 450},0 ,1 , WHITE);
+    DrawTextureEx(Tcheckerboard.backfaceR,(Vector2) {4.5*screenWidth/9, 50},0 ,0.69 , WHITE);
+    //DrawTextureRec(Tcheckerboard.backface, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
+    DrawTextureEx(Tcheckerboard.backfaceB,(Vector2) {4*screenWidth/16, 450},0 ,1 , WHITE);
     DrawTextureEx(Tcheckerboard.c9,(Vector2) {7*screenWidth/16, 450},0 ,1 , WHITE);
     DrawTextureEx(Tcheckerboard.cK,(Vector2) {10*screenWidth/16, 450},0 ,1 , WHITE);
 
