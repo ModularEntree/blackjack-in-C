@@ -4,9 +4,10 @@
 #include <string.h>
 #include <malloc.h>
 #include <stdbool.h>
+#include <locale.h>
+#include <winnls.h>
 //#include <raylib.h>
 #define MAX_SIZE 22
-#define TRUE true
 #define null ((void*)0)
 
 int hit();
@@ -21,59 +22,92 @@ typedef struct karta{
 
 int main() {
     srand(time(null));
-    Karta eso;
-    eso.cislo =  1;
-    eso.id = 'A';
-    strcpy(eso.nazev, "Eso");
-    Karta dvojka;
-    dvojka.cislo =  2;
-    dvojka.id = '2';
-    strcpy(dvojka.nazev, "Dvojka");
-    Karta trojka;
-    trojka.cislo =  3;
-    trojka.id = '3';
-    strcpy(trojka.nazev, "Trojka");
-    Karta ctyrka;
-    ctyrka.cislo =  4;
-    ctyrka.id = '4';
-    strcpy(ctyrka.nazev, "Ctyrka");
-    Karta petka;
-    petka.cislo =  5;
-    petka.id = '5';
-    strcpy(petka.nazev, "Petka");
-    Karta sestka;
-    sestka.cislo =  6;
-    sestka.id = '6';
-    strcpy(sestka.nazev, "Sestka");
-    Karta sedma;
-    sedma.cislo =  7;
-    sedma.id = '7';
-    strcpy(sedma.nazev, "Sedma");
-    Karta osma;
-    osma.cislo =  8;
-    osma.id = '8';
-    strcpy(osma.nazev, "Osma");
-    Karta devitka;
-    devitka.cislo =  9;
-    devitka.id = '9';
-    strcpy(devitka.nazev, "Devitka");
-    Karta desitka;
-    desitka.cislo =  10;
-    desitka.id = 'X';
-    strcpy(desitka.nazev, "Desitka");
-    Karta junek;
-    junek.cislo =  10;
-    junek.id = 'J';
-    strcpy(junek.nazev, "Junek");
-    Karta kralovna;
-    kralovna.cislo =  10;
-    kralovna.id = 'Q';
-    strcpy(kralovna.nazev, "Kralovna");
-    Karta kral;
-    kral.cislo =  10;
-    kral.id = 'K';
-    strcpy(kral.nazev, "Kral");
-    // hra
+    Karta ace;
+    ace.cislo =  1;
+    ace.id = 'A';
+    Karta two;
+    two.cislo =  2;
+    two.id = '2';
+    Karta three;
+    three.cislo =  3;
+    three.id = '3';
+    Karta four;
+    four.cislo =  4;
+    four.id = '4';
+    Karta five;
+    five.cislo =  5;
+    five.id = '5';
+    Karta six;
+    six.cislo =  6;
+    six.id = '6';
+    Karta seven;
+    seven.cislo =  7;
+    seven.id = '7';
+    Karta eight;
+    eight.cislo =  8;
+    eight.id = '8';
+    Karta nine;
+    nine.cislo =  9;
+    nine.id = '9';
+    Karta ten;
+    ten.cislo =  10;
+    ten.id = 'X';
+    Karta jack;
+    jack.cislo =  10;
+    jack.id = 'J';
+    Karta queen;
+    queen.cislo =  10;
+    queen.id = 'Q';
+    Karta king;
+    king.cislo =  10;
+    king.id = 'K';
+    // start conf
+    char error_hs[29], error_unk[24], option_hs[16];
+    if (setlocale(LC_ALL, "")==null) {
+        printf("Error in locale detection.");
+    }
+    else if (!strcmp(setlocale(LC_ALL, ""),setlocale(LC_ALL, "Czech_Czechia.1250"))) {
+        // Czech localization (cause i am czech, lol)
+        // structs
+        strcpy(ace.nazev, "Eso");
+        strcpy(two.nazev, "Dvojka");
+        strcpy(three.nazev, "Trojka");
+        strcpy(four.nazev, "Ctyrka");
+        strcpy(five.nazev, "Petka");
+        strcpy(six.nazev, "Sestka");
+        strcpy(seven.nazev, "Sedma");
+        strcpy(eight.nazev, "Osma");
+        strcpy(nine.nazev, "Devitka");
+        strcpy(ten.nazev, "Desitka");
+        strcpy(jack.nazev, "Junek");
+        strcpy(queen.nazev, "Kralovna");
+        strcpy(king.nazev, "Kral");
+        // normal text
+        strcpy(option_hs, "Hit nebo stand?");
+        // errors
+        strcpy(error_hs, "Nepodporovany vyraz.");
+        strcpy(error_unk, "Neznama chyba.");
+    }
+    else {
+        // Default US localization
+        strcpy(ace.nazev, "Ace");
+        strcpy(two.nazev, "Two");
+        strcpy(three.nazev, "Three");
+        strcpy(four.nazev, "Four");
+        strcpy(five.nazev, "Five");
+        strcpy(six.nazev, "Six");
+        strcpy(seven.nazev, "Seven");
+        strcpy(eight.nazev, "Eight");
+        strcpy(nine.nazev, "Nine");
+        strcpy(ten.nazev, "Ten");
+        strcpy(jack.nazev, "Jack");
+        strcpy(queen.nazev, "Queen");
+        strcpy(king.nazev, "King");
+        strcpy(option_hs, "Hit or stand?");
+        strcpy(error_hs, "Unknown option was selected.");
+        strcpy(error_unk, "Unknown error occurred.");
+    }
+    // game
     int i, HandSumMe = 0, HandSumHouse = 0, stringlen;
     char *HOS;
     HOS = (char *) malloc (sizeof(char)*MAX_SIZE);
@@ -98,7 +132,7 @@ int main() {
     printf("%d\n", HandSumMe);
     printf("%d\n", HandSumHouse);
 
-    printf("Hit or Stand? \n");
+    puts(option_hs);
     fgets(HOS, sizeof(HOS), stdin);
     stringlen = strlen(HOS);
     HOS[stringlen-1]='\0';
@@ -114,51 +148,51 @@ int main() {
             else if(!strcmp(HOS, "s"))
                 Stand = true;
             else
-                printf("Nepodporovany vyraz.");
+                puts(error_hs);
             break;
         }
         case 4: {
-            HOS = (char *) malloc (sizeof(char)*4);
+            HOS = (char *) realloc ( HOS,sizeof(char)*4);
             if (!strcmp(HOS, "Hit"))
                 Hit = true;
             else if (!strcmp(HOS, "hit"))
                 Hit = true;
             else
-                printf("Nepodporovany vyraz.");
+                puts(error_hs);
             break;
         }
         case 5: {
-            HOS = (char *) malloc (sizeof(char)*5);
+            HOS = (char *) realloc ( HOS,sizeof(char)*5);
             if (!strcmp(HOS, "Hit."))
                 Hit = true;
             else if (!strcmp(HOS, "hit."))
                 Hit = true;
             else
-                printf("Nepodporovany vyraz.");
+                puts(error_hs);
             break;
         }
         case 6: {
-            HOS = (char *) malloc (sizeof(char)*6);
+            HOS = (char *) realloc ( HOS,sizeof(char)*6);
             if (!strcmp(HOS, "Stand"))
                 Stand = true;
             else if(!strcmp(HOS, "stand"))
                 Stand = true;
             else
-                printf("Nepodporovany vyraz.");
+                puts(error_hs);
             break;
         }
         case 7: {
-            HOS = (char *) malloc (sizeof(char)*7);
+            HOS = (char *) realloc ( HOS,sizeof(char)*7);
             if(!strcmp(HOS, "Stand."))
                 Stand = true;
             else if(!strcmp(HOS, "stand."))
                 Stand = true;
             else
-                printf("Nepodporovany vyraz");
+                puts(error_hs);
             break;
         }
         default: {
-            printf("Chyba ve funkci.");
+            puts(error_unk);;
             break;
         }
     }
