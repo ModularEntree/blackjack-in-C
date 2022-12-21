@@ -10,103 +10,53 @@
 #define MAX_SIZE 22
 #define null ((void*)0)
 
+typedef struct Card{
+    int num;
+    char id, name[MAX_SIZE];
+} card;
+
+typedef struct Localization{
+    char error_hs[29], error_unk[24], option_hs[16];
+} localization;
+
+card ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king;
+localization czech, english, def;
+
 int hit();
 int sum(int *p);
 
-typedef struct karta{
-    int cislo;
-    char id;
-    char nazev[MAX_SIZE];
-} Karta;
-
+localization local();
 
 int main() {
     srand(time(null));
-    Karta ace;
-    ace.cislo =  1;
+    ace.num =  1;
     ace.id = 'A';
-    Karta two;
-    two.cislo =  2;
+    two.num =  2;
     two.id = '2';
-    Karta three;
-    three.cislo =  3;
+    three.num =  3;
     three.id = '3';
-    Karta four;
-    four.cislo =  4;
+    four.num =  4;
     four.id = '4';
-    Karta five;
-    five.cislo =  5;
+    five.num =  5;
     five.id = '5';
-    Karta six;
-    six.cislo =  6;
+    six.num =  6;
     six.id = '6';
-    Karta seven;
-    seven.cislo =  7;
+    seven.num =  7;
     seven.id = '7';
-    Karta eight;
-    eight.cislo =  8;
+    eight.num =  8;
     eight.id = '8';
-    Karta nine;
-    nine.cislo =  9;
+    nine.num =  9;
     nine.id = '9';
-    Karta ten;
-    ten.cislo =  10;
+    ten.num =  10;
     ten.id = 'X';
-    Karta jack;
-    jack.cislo =  10;
+    jack.num =  10;
     jack.id = 'J';
-    Karta queen;
-    queen.cislo =  10;
+    queen.num =  10;
     queen.id = 'Q';
-    Karta king;
-    king.cislo =  10;
+    king.num =  10;
     king.id = 'K';
     // start conf
-    char error_hs[29], error_unk[24], option_hs[16];
-    if (setlocale(LC_ALL, "")==null) {
-        printf("Error in locale detection.");
-    }
-    else if (!strcmp(setlocale(LC_ALL, ""),setlocale(LC_ALL, "Czech_Czechia.1250"))) {
-        // Czech localization (cause i am czech, lol)
-        // structs
-        strcpy(ace.nazev, "Eso");
-        strcpy(two.nazev, "Dvojka");
-        strcpy(three.nazev, "Trojka");
-        strcpy(four.nazev, "Ctyrka");
-        strcpy(five.nazev, "Petka");
-        strcpy(six.nazev, "Sestka");
-        strcpy(seven.nazev, "Sedma");
-        strcpy(eight.nazev, "Osma");
-        strcpy(nine.nazev, "Devitka");
-        strcpy(ten.nazev, "Desitka");
-        strcpy(jack.nazev, "Junek");
-        strcpy(queen.nazev, "Kralovna");
-        strcpy(king.nazev, "Kral");
-        // normal text
-        strcpy(option_hs, "Hit nebo stand?");
-        // errors
-        strcpy(error_hs, "Nepodporovany vyraz.");
-        strcpy(error_unk, "Neznama chyba.");
-    }
-    else {
-        // Default US localization
-        strcpy(ace.nazev, "Ace");
-        strcpy(two.nazev, "Two");
-        strcpy(three.nazev, "Three");
-        strcpy(four.nazev, "Four");
-        strcpy(five.nazev, "Five");
-        strcpy(six.nazev, "Six");
-        strcpy(seven.nazev, "Seven");
-        strcpy(eight.nazev, "Eight");
-        strcpy(nine.nazev, "Nine");
-        strcpy(ten.nazev, "Ten");
-        strcpy(jack.nazev, "Jack");
-        strcpy(queen.nazev, "Queen");
-        strcpy(king.nazev, "King");
-        strcpy(option_hs, "Hit or stand?");
-        strcpy(error_hs, "Unknown option was selected.");
-        strcpy(error_unk, "Unknown error occurred.");
-    }
+    def = local();
     // game
     int i, HandSumMe = 0, HandSumHouse = 0, stringlen;
     char *HOS;
@@ -132,7 +82,7 @@ int main() {
     printf("%d\n", HandSumMe);
     printf("%d\n", HandSumHouse);
 
-    puts(option_hs);
+    puts(def.option_hs);
     fgets(HOS, sizeof(HOS), stdin);
     stringlen = strlen(HOS);
     HOS[stringlen-1]='\0';
@@ -148,7 +98,7 @@ int main() {
             else if(!strcmp(HOS, "s"))
                 Stand = true;
             else
-                puts(error_hs);
+                puts(def.error_hs);
             break;
         }
         case 4: {
@@ -158,7 +108,7 @@ int main() {
             else if (!strcmp(HOS, "hit"))
                 Hit = true;
             else
-                puts(error_hs);
+                puts(def.error_hs);
             break;
         }
         case 5: {
@@ -168,7 +118,7 @@ int main() {
             else if (!strcmp(HOS, "hit."))
                 Hit = true;
             else
-                puts(error_hs);
+                puts(def.error_hs);
             break;
         }
         case 6: {
@@ -178,7 +128,7 @@ int main() {
             else if(!strcmp(HOS, "stand"))
                 Stand = true;
             else
-                puts(error_hs);
+                puts(def.error_hs);
             break;
         }
         case 7: {
@@ -188,11 +138,11 @@ int main() {
             else if(!strcmp(HOS, "stand."))
                 Stand = true;
             else
-                puts(error_hs);
+                puts(def.error_hs);
             break;
         }
         default: {
-            puts(error_unk);;
+            puts(def.error_unk);;
             break;
         }
     }
@@ -210,4 +160,52 @@ int sum(int *p) {
     for (i =0;i<=MAX_SIZE;p++&&i++)
         sum = sum + *p;
     return sum;
+}
+
+localization local() {
+    //bool czech = false;
+    if (setlocale(LC_ALL, "") == null) {
+        printf("Error in locale detection.");
+    } else if (!strcmp(setlocale(LC_ALL, ""), setlocale(LC_ALL, "Czech_Czechia.1250"))) {
+        // Czech localization (cause i am czech, lol)
+        // structs
+        strcpy(ace.name, "Eso");
+        strcpy(two.name, "Dvojka");
+        strcpy(three.name, "Trojka");
+        strcpy(four.name, "Ctyrka");
+        strcpy(five.name, "Petka");
+        strcpy(six.name, "Sestka");
+        strcpy(seven.name, "Sedma");
+        strcpy(eight.name, "Osma");
+        strcpy(nine.name, "Devitka");
+        strcpy(ten.name, "Desitka");
+        strcpy(jack.name, "Junek");
+        strcpy(queen.name, "Kralovna");
+        strcpy(king.name, "Kral");
+        // normal text
+        strcpy(czech.option_hs, "Hit nebo stand?");
+        // errors
+        strcpy(czech.error_hs, "Nepodporovany vyraz.");
+        strcpy(czech.error_unk, "Neznama chyba.");
+        return czech;
+    } else {
+        // Default US localization
+        strcpy(ace.name, "Ace");
+        strcpy(two.name, "Two");
+        strcpy(three.name, "Three");
+        strcpy(four.name, "Four");
+        strcpy(five.name, "Five");
+        strcpy(six.name, "Six");
+        strcpy(seven.name, "Seven");
+        strcpy(eight.name, "Eight");
+        strcpy(nine.name, "Nine");
+        strcpy(ten.name, "Ten");
+        strcpy(jack.name, "Jack");
+        strcpy(queen.name, "Queen");
+        strcpy(king.name, "King");
+        strcpy(english.option_hs, "Hit or stand?");
+        strcpy(english.error_hs, "Unknown option was selected.");
+        strcpy(english.error_unk, "Unknown error occurred.");
+        return english;
+    }
 }
