@@ -2,14 +2,15 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <malloc.h>
 #include <stdbool.h>
-#include <raylib.h>
-#define MAX_SIZE 10
+//#include <raylib.h>
+#define MAX_SIZE 22
 #define TRUE true
+#define null ((void*)0)
 
-int hit() {
-    return rand() % (10-1+1) + 1;
-}
+int hit();
+int sum(int *p);
 
 typedef struct karta{
     int cislo;
@@ -19,7 +20,7 @@ typedef struct karta{
 
 
 int main() {
-    srand(time(NULL));
+    srand(time(null));
     Karta eso;
     eso.cislo =  1;
     eso.id = 'A';
@@ -73,19 +74,106 @@ int main() {
     kral.id = 'K';
     strcpy(kral.nazev, "Kral");
     // hra
-    int i;
-    int HandMe[22];
-    int HandHouse[22];
-    for (i = 0; i<=22;i++)
+    int i, HandSumMe = 0, HandSumHouse = 0, stringlen;
+    char *HOS;
+    HOS = (char *) malloc (sizeof(char)*MAX_SIZE);
+    int HandMe[MAX_SIZE];
+    int HandHouse[MAX_SIZE];
+    bool Hit = false, Stand = false;
+    for (i = 0; i<=MAX_SIZE;i++)
         HandMe[i] = 0;
-    for (i = 0; i<=22;i++)
-        HandMe[i] = 0;
+    for (i = 0; i<=MAX_SIZE;i++)
+        HandHouse[i] = 0;
     HandMe[0] = hit();
+    printf("%d\n", HandMe[0]);
     HandMe[1] = hit();
+    printf("%d\n", HandMe[1]);
     HandHouse[0] = hit();
+    printf("%d\n", HandHouse[0]);
     HandHouse[1] = hit();
-    while (TRUE) {
+    printf("%d\n", HandHouse[1]);
 
+    HandSumMe = sum(HandMe);
+    HandSumHouse = sum(HandHouse);
+    printf("%d\n", HandSumMe);
+    printf("%d\n", HandSumHouse);
+
+    printf("Hit or Stand? \n");
+    fgets(HOS, sizeof(HOS), stdin);
+    stringlen = strlen(HOS);
+    HOS[stringlen-1]='\0';
+    switch (stringlen) {
+        case 2: {
+            HOS = (char *) realloc ( HOS,sizeof(char)*2);
+            if (!strcmp(HOS, "H"))
+                Hit = true;
+            else if(!strcmp(HOS, "S"))
+                Stand = true;
+            else if(!strcmp(HOS, "h"))
+                Hit = true;
+            else if(!strcmp(HOS, "s"))
+                Stand = true;
+            else
+                printf("Nepodporovany vyraz.");
+            break;
+        }
+        case 4: {
+            HOS = (char *) malloc (sizeof(char)*4);
+            if (!strcmp(HOS, "Hit"))
+                Hit = true;
+            else if (!strcmp(HOS, "hit"))
+                Hit = true;
+            else
+                printf("Nepodporovany vyraz.");
+            break;
+        }
+        case 5: {
+            HOS = (char *) malloc (sizeof(char)*5);
+            if (!strcmp(HOS, "Hit."))
+                Hit = true;
+            else if (!strcmp(HOS, "hit."))
+                Hit = true;
+            else
+                printf("Nepodporovany vyraz.");
+            break;
+        }
+        case 6: {
+            HOS = (char *) malloc (sizeof(char)*6);
+            if (!strcmp(HOS, "Stand"))
+                Stand = true;
+            else if(!strcmp(HOS, "stand"))
+                Stand = true;
+            else
+                printf("Nepodporovany vyraz.");
+            break;
+        }
+        case 7: {
+            HOS = (char *) malloc (sizeof(char)*7);
+            if(!strcmp(HOS, "Stand."))
+                Stand = true;
+            else if(!strcmp(HOS, "stand."))
+                Stand = true;
+            else
+                printf("Nepodporovany vyraz");
+            break;
+        }
+        default: {
+            printf("Chyba ve funkci.");
+            break;
+        }
     }
+    if (Hit==true||Stand==true)
+        puts("Amogus");
     return 0;
+}
+
+int hit() {
+    return rand() % (10-1+1) + 1;
+}
+
+int sum(int *p) {
+    int sum = 0, i;
+    for (i =0;i<=MAX_SIZE;p++&&i++)
+        sum = sum + *p;
+    return sum;
 }
