@@ -16,20 +16,20 @@ typedef struct Card{
 } card;
 
 typedef struct Localization{
-    char error_hs[29], error_unk[24], option_hs[16];
+    char error_hs[29], error_unk[24], option_hs[16], option_win[12], option_lose[13];
 } localization;
 
 card ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king;
 localization czech, english, def;
 
-int hit();
+int hit(bool *aceTrue)
 int sum(int *p);
 
 localization local();
 bool hitOrStand ();
 
 int main() {
-    srand(time(null));
+    srand(time(null)); // maybe change the seed?
     ace.num =  1;
     ace.id = 'A';
     two.num =  2;
@@ -59,38 +59,63 @@ int main() {
     // start conf
     def = local();
     // GAME - in future in function
-    int i, HandSumMe = 0, HandSumHouse = 0;
+    int i, HandSumMe = 0, HandSumHouse = 0, cardNumMe, cardNumHouse;
     // "nulling" hands and giving them first two cards
     int HandMe[MAX_SIZE], HandHouse[MAX_SIZE];
-    bool Hit = false, Stand = false;
+    bool Hit = false, Stand = false, *aceTrue;
+    aceTrue = (bool*) malloc(sizeof (bool));
+    aceTrue = false;
     for (i = 0; i<=MAX_SIZE;i++)
         HandMe[i] = 0;
     for (i = 0; i<=MAX_SIZE;i++)
         HandHouse[i] = 0;
-    HandMe[0] = hit();
-    printf("%d\n", HandMe[0]);
-    HandMe[1] = hit();
-    printf("%d\n", HandMe[1]);
-    HandHouse[0] = hit();
-    printf("%d\n", HandHouse[0]);
-    HandHouse[1] = hit();
-    printf("%d\n", HandHouse[1]);
-    // sum of hands
+    HandMe[cardNumMe++] = hit(aceTrue);
+    printf("%d\n", HandMe[--cardNumMe]);
+    HandMe[cardNumMe++] = hit(aceTrue);
+    printf("%d\n", HandMe[--cardNumMe]);
+    HandHouse[cardNumHouse++] = hit(aceTrue);
+    printf("%d\n", HandHouse[--cardNumHouse]);
+    HandHouse[cardNumHouse++] = hit(aceTrue);
+    printf("%d\n", HandHouse[--cardNumHouse]);
+    // sum of hands for later start-win situation
     HandSumMe = sum(HandMe);
     HandSumHouse = sum(HandHouse);
-    // hit or stand decision
-    if (hitOrStand()==true)
-        Hit = true;
-    else
-        Stand = false;
 
-
+    for (true;true;cardNumMe++) {
+        if (hitOrStand()==true) {
+            HandMe[cardNumMe] = hit(aceTrue);
+            printf("%d\n", HandMe[cardNumMe]);
+        }
+        else
+            for (true;true;cardNumHouse++) {
+                HandHouse[cardNumHouse] = hit(aceTrue);
+                printf("%d\n", HandHouse[cardNumHouse]);
+                if ((sum(HandHouse)<=21)&&(sum(HandHouse)>=sum(HandMe))) {
+                    puts(def.option_lose);
+                    break;
+                }
+                else {
+                    puts(def.option_win);
+                    break;
+                }
+            }
+        if (sum(HandMe)>21) {
+            puts(def.option_lose);
+            break;
+        }
+    }
 
     return 0;
 }
 
-int hit() {
-    return rand() % (10-1+1) + 1;
+int hit(bool *aceTrue) {
+    int hitNum;
+    hitNum = rand() % (10-1+1) + 1;
+    if (hitNum==1) {
+        *aceTrue = true;
+        return hitNum;
+    }
+    return hitNum;
 }
 
 int sum(int *p) {
@@ -171,7 +196,7 @@ bool hitOrStand () {
 }
 
 // i am not sure, if this will work, 'cause i am not on linux. must try it later
-#ifdef __linux__
+#ifdef __linux__ //outdated
 localization local() {
     if (setlocale(LC_ALL, "") == null) {
         printf("Error in locale detection.");
@@ -241,6 +266,8 @@ localization local() {
         strcpy(king.name, "Kral");
         // normal text
         strcpy(czech.option_hs, "Hit nebo stand?");
+        strcpy(czech.option_lose, "Prohlal jsi!");
+        strcpy(czech.option_win, "Vyhral jsi!");
         // errors
         strcpy(czech.error_hs, "Nepodporovany vyraz.");
         strcpy(czech.error_unk, "Neznama chyba.");
@@ -261,6 +288,8 @@ localization local() {
         strcpy(queen.name, "Queen");
         strcpy(king.name, "King");
         strcpy(english.option_hs, "Hit or stand?");
+        strcpy(english.option_lose, "Prohlal jsi!");
+        strcpy(english.option_win, "Vyhral jsi!");
         strcpy(english.error_hs, "Unknown option was selected.");
         strcpy(english.error_unk, "Unknown error occurred.");
         return english;
