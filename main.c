@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <malloc.h>
 #include <stdbool.h>
 #include <locale.h>
-#include <winnls.h>
 //#include <raylib.h>
 #define MAX_SIZE 22
 #define null ((void*)0)
@@ -22,7 +20,7 @@ typedef struct Localization{
 card ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king;
 localization czech, english, def;
 
-int hit(bool *aceTrue)
+int hit();
 int sum(int *p);
 
 localization local();
@@ -59,23 +57,20 @@ int main() {
     // start conf
     def = local();
     // GAME - in future in function
-    int i, HandSumMe = 0, HandSumHouse = 0, cardNumMe, cardNumHouse;
+    int i, HandSumMe, HandSumHouse, cardNumMe = 0, cardNumHouse = 0;
     // "nulling" hands and giving them first two cards
     int HandMe[MAX_SIZE], HandHouse[MAX_SIZE];
-    bool Hit = false, Stand = false, *aceTrue;
-    aceTrue = (bool*) malloc(sizeof (bool));
-    aceTrue = false;
     for (i = 0; i<=MAX_SIZE;i++)
         HandMe[i] = 0;
     for (i = 0; i<=MAX_SIZE;i++)
         HandHouse[i] = 0;
-    HandMe[cardNumMe++] = hit(aceTrue);
+    HandMe[cardNumMe++] = hit();
     printf("%d\n", HandMe[--cardNumMe]);
-    HandMe[cardNumMe++] = hit(aceTrue);
+    HandMe[cardNumMe++] = hit();
     printf("%d\n", HandMe[--cardNumMe]);
-    HandHouse[cardNumHouse++] = hit(aceTrue);
+    HandHouse[cardNumHouse++] = hit();
     printf("%d\n", HandHouse[--cardNumHouse]);
-    HandHouse[cardNumHouse++] = hit(aceTrue);
+    HandHouse[cardNumHouse++] = hit();
     printf("%d\n", HandHouse[--cardNumHouse]);
     // sum of hands for later start-win situation
     HandSumMe = sum(HandMe);
@@ -83,12 +78,12 @@ int main() {
 
     for (true;true;cardNumMe++) {
         if (hitOrStand()==true) {
-            HandMe[cardNumMe] = hit(aceTrue);
+            HandMe[cardNumMe] = hit();
             printf("%d\n", HandMe[cardNumMe]);
         }
         else
             for (true;true;cardNumHouse++) {
-                HandHouse[cardNumHouse] = hit(aceTrue);
+                HandHouse[cardNumHouse] = hit();
                 printf("%d\n", HandHouse[cardNumHouse]);
                 if ((sum(HandHouse)<=21)&&(sum(HandHouse)>=sum(HandMe))) {
                     puts(def.option_lose);
@@ -108,20 +103,20 @@ int main() {
     return 0;
 }
 
-int hit(bool *aceTrue) {
-    int hitNum;
-    hitNum = rand() % (10-1+1) + 1;
-    if (hitNum==1) {
-        *aceTrue = true;
-        return hitNum;
-    }
-    return hitNum;
+int hit() {
+    return rand() % (10-1+1) + 1;
 }
 
-int sum(int *p) {
-    int sum = 0, i;
-    for (i =0;i<=MAX_SIZE;p++&&i++)
-        sum = sum + *p;
+int sum(int *hand) {
+    int sum = 0, i, exc;
+    for (i =0;i<=MAX_SIZE;(hand++)&&(i++)) {
+        if ((sum<=21)&&(*hand==1)) {
+            exc = 11; //this is temporary solution - i should make a recursive function to do this
+        }
+        else
+            exc = *hand;
+        sum = sum + exc;
+    }
     return sum;
 }
 
@@ -193,6 +188,8 @@ bool hitOrStand () {
             break;
         }
     }
+
+    return null;
 }
 
 // i am not sure, if this will work, 'cause i am not on linux. must try it later
@@ -246,9 +243,7 @@ localization local() {
 #else
 localization local() {
     //bool czech = false;
-    if (setlocale(LC_ALL, "") == null) {
-        printf("Error in locale detection.");
-    } else if (!strcmp(setlocale(LC_ALL, ""), setlocale(LC_ALL, "Czech_Czechia.1250"))) {
+    if (!strcmp(setlocale(LC_ALL, ""), setlocale(LC_ALL, "Czech_Czechia.1250"))) {
         // Czech localization (cause i am czech, lol)
         // structs
         strcpy(ace.name, "Eso");
@@ -271,6 +266,7 @@ localization local() {
         // errors
         strcpy(czech.error_hs, "Nepodporovany vyraz.");
         strcpy(czech.error_unk, "Neznama chyba.");
+
         return czech;
     } else {
         // Default US localization
@@ -288,10 +284,11 @@ localization local() {
         strcpy(queen.name, "Queen");
         strcpy(king.name, "King");
         strcpy(english.option_hs, "Hit or stand?");
-        strcpy(english.option_lose, "Prohlal jsi!");
-        strcpy(english.option_win, "Vyhral jsi!");
+        strcpy(english.option_lose, "You lost!");
+        strcpy(english.option_win, "You won!");
         strcpy(english.error_hs, "Unknown option was selected.");
         strcpy(english.error_unk, "Unknown error occurred.");
+
         return english;
     }
 }
