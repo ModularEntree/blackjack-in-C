@@ -19,6 +19,7 @@
 #include <time.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 
 
@@ -44,12 +45,21 @@ typedef struct Cards {
     Texture2D backfaceR;
 }Cards;
 
+typedef struct pozice {
+    Vector2 K1;
+    Vector2 K2;
+    Vector2 K3;
+    Vector2 H1;
+    Vector2 H2;
+    Vector2 H3;
+}pozice;
+
 const char *cards[13] = {"ace_H", "Two_H", "Three_H", "Four_H", "Five_H", "Six_H", "Seven_H", "Eight_H", "Nine_H", "Ten_H", "Jack_H", "Queen_H", "King_H"};
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards checkerboard);     // Update and Draw one frame
+void UpdateDrawFrame(Cards checkerboard, pozice stul);     // Update and Draw one frame
 
 //----------------------------------------------------------------------------------
 // Main Enry Point
@@ -76,8 +86,16 @@ int main()
     deck.backfaceR = LoadTexture("../img/backfaceR.png");
     deck.cK = LoadTexture("../img/King_H.png");
 
+    pozice stul;
+
+    stul.K1 = (Vector2) {3.5*screenWidth/9, 50};
+    stul.K2 = (Vector2) {4.5*screenWidth/9, 50};
+    stul.K3 = (Vector2) {4.5*screenWidth/9, 50};
+    stul.H1 = (Vector2) {4*screenWidth/16, 450};
+    stul.H2 = (Vector2) {7*screenWidth/16, 450};
+    stul.H3 = (Vector2) {10*screenWidth/16, 450};
+
     //--------------------------------------------------------------------------------------
-    //LoadFontFromImage((image){"resources/alagard.png"});
 
     Image Icon = LoadImage("../img/Blackjack-icon.png");
 
@@ -91,12 +109,18 @@ int main()
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        UpdateDrawFrame(deck);
+
+        /*if(IsKeyPressed(KEY_SPACE)){
+            UpdateTexture(deck.backfaceB, LoadImageColors(LoadImageFromTexture(deck.cA)));
+            UpdateTexture(deck.backfaceR, LoadImageColors(LoadImage("../img/backfaceB.png")));
+        }*/
+
+        UpdateDrawFrame(deck, stul);
     }
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadTexture(deck.cA);
+    //UnloadTexture(deck.cA);
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -107,8 +131,9 @@ int main()
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards Tcheckerboard)
+void UpdateDrawFrame(Cards Tcheckerboard, pozice stul)
 {
+
     // Update
     //----------------------------------------------------------------------------------
     // TODO: Update your variables here
@@ -118,8 +143,9 @@ void UpdateDrawFrame(Cards Tcheckerboard)
     //----------------------------------------------------------------------------------
     BeginDrawing();
 
-        ClearBackground(DARKERGREEN);
+    ClearBackground(DARKERGREEN);
 
+    DrawText("Blackjack", 2*screenWidth/5, 2*screenHeight/5, 50, GOLD);
 /*
     DrawCircle(screenWidth/4, screenHeight/2, 50, DARKBROWN);
 DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
@@ -131,12 +157,13 @@ DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 
     DrawText("W", 2*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 */
-    DrawTextureEx(Tcheckerboard.cA,(Vector2) {3.5*screenWidth/9, 50},0 ,0.69 , WHITE);
-    DrawTextureEx(Tcheckerboard.backfaceR,(Vector2) {4.5*screenWidth/9, 50},0 ,0.69 , WHITE);
+
+    DrawTextureEx(Tcheckerboard.cA, stul.K1, 0, 0.69, WHITE);
+    DrawTextureEx(Tcheckerboard.backfaceR, stul.K2, 0,0.69 , WHITE);
     //DrawTextureRec(Tcheckerboard.backface, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
-    DrawTextureEx(Tcheckerboard.backfaceB,(Vector2) {4*screenWidth/16, 450},0 ,1 , WHITE);
-    DrawTextureEx(Tcheckerboard.c9,(Vector2) {7*screenWidth/16, 450},0 ,1 , WHITE);
-    DrawTextureEx(Tcheckerboard.cK,(Vector2) {10*screenWidth/16, 450},0 ,1 , WHITE);
+    DrawTextureEx(Tcheckerboard.backfaceB, stul.H1, 0 ,1 , WHITE);
+    DrawTextureEx(Tcheckerboard.c9,stul.H2,0 ,1 , WHITE);
+    DrawTextureEx(Tcheckerboard.cK,stul.H3,0 ,1 , WHITE);
 
 
 
