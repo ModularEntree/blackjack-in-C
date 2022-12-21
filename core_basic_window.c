@@ -158,12 +158,15 @@ DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
     DrawText("W", 2*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 */
 
+
+
     DrawTextureEx(Tcheckerboard.cA, stul.K1, 0, 0.69, WHITE);
     DrawTextureEx(Tcheckerboard.backfaceR, stul.K2, 0,0.69 , WHITE);
-    //DrawTextureRec(Tcheckerboard.backface, (Rectangle){0, 0, 100, 100}, (Vector2){screenWidth/2-50, screenHeight/2-50}, WHITE);
+
     DrawTextureEx(Tcheckerboard.backfaceB, stul.H1, 0 ,1 , WHITE);
     DrawTextureEx(Tcheckerboard.c9,stul.H2,0 ,1 , WHITE);
     DrawTextureEx(Tcheckerboard.cK,stul.H3,0 ,1 , WHITE);
+
 
 
 
