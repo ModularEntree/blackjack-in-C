@@ -26,6 +26,7 @@ int hit();
 int sum(int *p);
 
 localization local();
+bool hitOrStand ();
 
 int main() {
     srand(time(null));
@@ -57,12 +58,10 @@ int main() {
     king.id = 'K';
     // start conf
     def = local();
-    // game
-    int i, HandSumMe = 0, HandSumHouse = 0, stringlen;
-    char *HOS;
-    HOS = (char *) malloc (sizeof(char)*MAX_SIZE);
-    int HandMe[MAX_SIZE];
-    int HandHouse[MAX_SIZE];
+    // GAME - in future in function
+    int i, HandSumMe = 0, HandSumHouse = 0;
+    // "nulling" hands and giving them first two cards
+    int HandMe[MAX_SIZE], HandHouse[MAX_SIZE];
     bool Hit = false, Stand = false;
     for (i = 0; i<=MAX_SIZE;i++)
         HandMe[i] = 0;
@@ -76,78 +75,17 @@ int main() {
     printf("%d\n", HandHouse[0]);
     HandHouse[1] = hit();
     printf("%d\n", HandHouse[1]);
-
+    // sum of hands
     HandSumMe = sum(HandMe);
     HandSumHouse = sum(HandHouse);
-    printf("%d\n", HandSumMe);
-    printf("%d\n", HandSumHouse);
+    // hit or stand decision
+    if (hitOrStand()==true)
+        Hit = true;
+    else
+        Stand = false;
 
-    puts(def.option_hs);
-    fgets(HOS, sizeof(HOS), stdin);
-    stringlen = strlen(HOS);
-    HOS[stringlen-1]='\0';
-    switch (stringlen) {
-        case 2: {
-            HOS = (char *) realloc ( HOS,sizeof(char)*2);
-            if (!strcmp(HOS, "H"))
-                Hit = true;
-            else if(!strcmp(HOS, "S"))
-                Stand = true;
-            else if(!strcmp(HOS, "h"))
-                Hit = true;
-            else if(!strcmp(HOS, "s"))
-                Stand = true;
-            else
-                puts(def.error_hs);
-            break;
-        }
-        case 4: {
-            HOS = (char *) realloc ( HOS,sizeof(char)*4);
-            if (!strcmp(HOS, "Hit"))
-                Hit = true;
-            else if (!strcmp(HOS, "hit"))
-                Hit = true;
-            else
-                puts(def.error_hs);
-            break;
-        }
-        case 5: {
-            HOS = (char *) realloc ( HOS,sizeof(char)*5);
-            if (!strcmp(HOS, "Hit."))
-                Hit = true;
-            else if (!strcmp(HOS, "hit."))
-                Hit = true;
-            else
-                puts(def.error_hs);
-            break;
-        }
-        case 6: {
-            HOS = (char *) realloc ( HOS,sizeof(char)*6);
-            if (!strcmp(HOS, "Stand"))
-                Stand = true;
-            else if(!strcmp(HOS, "stand"))
-                Stand = true;
-            else
-                puts(def.error_hs);
-            break;
-        }
-        case 7: {
-            HOS = (char *) realloc ( HOS,sizeof(char)*7);
-            if(!strcmp(HOS, "Stand."))
-                Stand = true;
-            else if(!strcmp(HOS, "stand."))
-                Stand = true;
-            else
-                puts(def.error_hs);
-            break;
-        }
-        default: {
-            puts(def.error_unk);;
-            break;
-        }
-    }
-    if (Hit==true||Stand==true)
-        puts("Amogus");
+
+
     return 0;
 }
 
@@ -162,6 +100,125 @@ int sum(int *p) {
     return sum;
 }
 
+bool hitOrStand () {
+    int stringlen;
+    char *HOS;
+    HOS = (char *) malloc (sizeof(char)*MAX_SIZE);
+    puts(def.option_hs);
+    fgets(HOS, sizeof(HOS), stdin);
+    stringlen = strlen(HOS);
+    HOS[stringlen-1]='\0';
+    switch (stringlen) {
+        case 2: {
+            HOS = (char *) realloc ( HOS,sizeof(char)*2);
+            if (!strcmp(HOS, "H"))
+                return true;
+            else if(!strcmp(HOS, "S"))
+                return false;
+            else if(!strcmp(HOS, "h"))
+                return true;
+            else if(!strcmp(HOS, "s"))
+                return false;
+            else
+                puts(def.error_hs);
+            break;
+        }
+        case 4: {
+            HOS = (char *) realloc ( HOS,sizeof(char)*4);
+            if (!strcmp(HOS, "Hit"))
+                return true;
+            else if (!strcmp(HOS, "hit"))
+                return true;
+            else
+                puts(def.error_hs);
+            break;
+        }
+        case 5: {
+            HOS = (char *) realloc ( HOS,sizeof(char)*5);
+            if (!strcmp(HOS, "Hit."))
+                return true;
+            else if (!strcmp(HOS, "hit."))
+                return true;
+            else
+                puts(def.error_hs);
+            break;
+        }
+        case 6: {
+            HOS = (char *) realloc ( HOS,sizeof(char)*6);
+            if (!strcmp(HOS, "Stand"))
+                return false;
+            else if(!strcmp(HOS, "stand"))
+                return false;
+            else
+                puts(def.error_hs);
+            break;
+        }
+        case 7: {
+            HOS = (char *) realloc ( HOS,sizeof(char)*7);
+            if(!strcmp(HOS, "Stand."))
+                return false;
+            else if(!strcmp(HOS, "stand."))
+                return false;
+            else
+                puts(def.error_hs);
+            break;
+        }
+        default: {
+            puts(def.error_unk);;
+            break;
+        }
+    }
+}
+
+// i am not sure, if this will work, 'cause i am not on linux. must try it later
+#ifdef __linux__
+localization local() {
+    if (setlocale(LC_ALL, "") == null) {
+        printf("Error in locale detection.");
+    } else if (!strcmp(setlocale(LC_ALL, ""), setlocale(LC_ALL, "cs_CZ.UTF-8"))) {
+        // Czech localization (cause i am czech, lol)
+        // structs
+        strcpy(ace.name, "Eso");
+        strcpy(two.name, "Dvojka");
+        strcpy(three.name, "Trojka");
+        strcpy(four.name, "Ctyrka");
+        strcpy(five.name, "Petka");
+        strcpy(six.name, "Sestka");
+        strcpy(seven.name, "Sedma");
+        strcpy(eight.name, "Osma");
+        strcpy(nine.name, "Devitka");
+        strcpy(ten.name, "Desitka");
+        strcpy(jack.name, "Junek");
+        strcpy(queen.name, "Kralovna");
+        strcpy(king.name, "Kral");
+        // normal text
+        strcpy(czech.option_hs, "Hit nebo stand?");
+        // errors
+        strcpy(czech.error_hs, "Nepodporovany vyraz.");
+        strcpy(czech.error_unk, "Neznama chyba.");
+        return czech;
+    } else {
+        // Default US localization
+        strcpy(ace.name, "Ace");
+        strcpy(two.name, "Two");
+        strcpy(three.name, "Three");
+        strcpy(four.name, "Four");
+        strcpy(five.name, "Five");
+        strcpy(six.name, "Six");
+        strcpy(seven.name, "Seven");
+        strcpy(eight.name, "Eight");
+        strcpy(nine.name, "Nine");
+        strcpy(ten.name, "Ten");
+        strcpy(jack.name, "Jack");
+        strcpy(queen.name, "Queen");
+        strcpy(king.name, "King");
+        strcpy(english.option_hs, "Hit or stand?");
+        strcpy(english.error_hs, "Unknown option was selected.");
+        strcpy(english.error_unk, "Unknown error occurred.");
+        return english;
+    }
+}
+#else
 localization local() {
     //bool czech = false;
     if (setlocale(LC_ALL, "") == null) {
@@ -209,3 +266,4 @@ localization local() {
         return english;
     }
 }
+#endif
