@@ -41,6 +41,51 @@ typedef struct Cards {
     Texture2D c9;
     Texture2D c10;
     Texture2D cK;
+    Texture2D cQ;
+    Texture2D cJ;
+
+    Texture2D hA;
+    Texture2D h2;
+    Texture2D h3;
+    Texture2D h4;
+    Texture2D h5;
+    Texture2D h6;
+    Texture2D h7;
+    Texture2D h8;
+    Texture2D h9;
+    Texture2D h10;
+    Texture2D hK;
+    Texture2D hJ;
+    Texture2D hQ;
+
+    Texture2D dA;
+    Texture2D d2;
+    Texture2D d3;
+    Texture2D d4;
+    Texture2D d5;
+    Texture2D d6;
+    Texture2D d7;
+    Texture2D d8;
+    Texture2D d9;
+    Texture2D d10;
+    Texture2D dK;
+    Texture2D dJ;
+    Texture2D dQ;
+
+    Texture2D sA;
+    Texture2D s2;
+    Texture2D s3;
+    Texture2D s4;
+    Texture2D s5;
+    Texture2D s6;
+    Texture2D s7;
+    Texture2D s8;
+    Texture2D s9;
+    Texture2D s10;
+    Texture2D sK;
+    Texture2D sJ;
+    Texture2D sQ;
+
     Texture2D backfaceB;
     Texture2D backfaceR;
 }Cards;
@@ -72,19 +117,64 @@ int main()
     InitWindow(screenWidth, screenHeight, "Blackjack");
 
     Cards deck;
-    deck.cA = LoadTexture("../img/ace_H.png");
-    deck.c2 = LoadTexture("../img/Two_H.png");
-    deck.c3 = LoadTexture("../img/Three_H.png");
-    deck.c4 = LoadTexture("../img/Four_H.png");
-    deck.c5 = LoadTexture("../img/Five_H.png");
-    deck.c6 = LoadTexture("../img/Six_H.png");
-    deck.c7 = LoadTexture("../img/Seven_H.png");
-    deck.c8 = LoadTexture("../img/Eight_H.png");
-    deck.c9 = LoadTexture("../img/Nine_H.png");
-    deck.c10 = LoadTexture("../img/Ten_H.png");
+    deck.hA = LoadTexture("../img/hearts/Ace.png");
+    deck.h2 = LoadTexture("../img/hearts/Two.png");
+    deck.h3 = LoadTexture("../img/hearts/Three.png");
+    deck.h4 = LoadTexture("../img/hearts/Four.png");
+    deck.h5 = LoadTexture("../img/hearts/Five.png");
+    deck.h6 = LoadTexture("../img/hearts/Six.png");
+    deck.h7 = LoadTexture("../img/hearts/Seven.png");
+    deck.h8 = LoadTexture("../img/hearts/Eight.png");
+    deck.h9 = LoadTexture("../img/hearts/Nine.png");
+    deck.h10 = LoadTexture("../img/hearts/Ten.png");
+    deck.hJ = LoadTexture("../img/hearts/Jack.png");
+    deck.hQ = LoadTexture("../img/hearts/Queen.png");
+    deck.hK = LoadTexture("../img/hearts/King.png");
+
+    deck.cA = LoadTexture("../img/clubs/Ace.png");
+    deck.c2 = LoadTexture("../img/clubs/Two.png");
+    deck.c3 = LoadTexture("../img/clubs/Three.png");
+    deck.c4 = LoadTexture("../img/clubs/Four.png");
+    deck.c5 = LoadTexture("../img/clubs/Five.png");
+    deck.c6 = LoadTexture("../img/clubs/Six.png");
+    deck.c7 = LoadTexture("../img/clubs/Seven.png");
+    deck.c8 = LoadTexture("../img/clubs/Eight.png");
+    deck.c9 = LoadTexture("../img/clubs/Nine.png");
+    deck.c10 = LoadTexture("../img/clubs/Ten.png");
+    deck.cJ = LoadTexture("../img/clubs/Jack.png");
+    deck.cQ = LoadTexture("../img/clubs/Queen.png");
+    deck.cK = LoadTexture("../img/clubs/King.png");
+
+    deck.dA = LoadTexture("../img/diamonds/Ace.png");
+    deck.d2 = LoadTexture("../img/diamonds/Two.png");
+    deck.d3 = LoadTexture("../img/diamonds/Three.png");
+    deck.d4 = LoadTexture("../img/diamonds/Four.png");
+    deck.d5 = LoadTexture("../img/diamonds/Five.png");
+    deck.d6 = LoadTexture("../img/diamonds/Six.png");
+    deck.d7 = LoadTexture("../img/diamonds/Seven.png");
+    deck.d8 = LoadTexture("../img/diamonds/Eight.png");
+    deck.d9 = LoadTexture("../img/diamonds/Nine.png");
+    deck.d10 = LoadTexture("../img/diamonds/Ten.png");
+    deck.dJ = LoadTexture("../img/diamonds/Jack.png");
+    deck.dQ = LoadTexture("../img/diamonds/Queen.png");
+    deck.dK = LoadTexture("../img/diamonds/King.png");
+
+    deck.sA = LoadTexture("../img/spades/Ace.png");
+    deck.s2 = LoadTexture("../img/spades/Two.png");
+    deck.s3 = LoadTexture("../img/spades/Three.png");
+    deck.s4 = LoadTexture("../img/spades/Four.png");
+    deck.s5 = LoadTexture("../img/spades/Five.png");
+    deck.s6 = LoadTexture("../img/spades/Six.png");
+    deck.s7 = LoadTexture("../img/spades/Seven.png");
+    deck.s8 = LoadTexture("../img/spades/Eight.png");
+    deck.s9 = LoadTexture("../img/spades/Nine.png");
+    deck.s10 = LoadTexture("../img/spades/Ten.png");
+    deck.sJ = LoadTexture("../img/spades/Jack.png");
+    deck.sQ = LoadTexture("../img/spades/Queen.png");
+    deck.sK = LoadTexture("../img/spades/King.png");
+
     deck.backfaceB = LoadTexture("../img/backfaceB.png");
     deck.backfaceR = LoadTexture("../img/backfaceR.png");
-    deck.cK = LoadTexture("../img/King_H.png");
 
     pozice stul;
 
