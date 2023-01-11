@@ -173,8 +173,8 @@ int main()
     deck.sQ = LoadTexture("../img/spades/Queen.png");
     deck.sK = LoadTexture("../img/spades/King.png");
 
-    deck.backfaceB = LoadTexture("../img/backfaceB.png");
-    deck.backfaceR = LoadTexture("../img/backfaceR.png");
+    deck.backfaceB = LoadTexture("../img/backs/kittyback-blue.png");
+    deck.backfaceR = LoadTexture("../img/backs/kittyback-red.png");
 
     pozice stul;
 
