@@ -24,7 +24,7 @@ endif()
 
 # Our Project
 
-add_executable(${PROJECT_NAME} main.c core_basic_window.c #[[shapes_bouncing_ball.c]])
+add_executable(${PROJECT_NAME} main.c core_basic_window.c #[[shapes_bouncing_ball.c]] load_structs.c load_structs.h)
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
 
