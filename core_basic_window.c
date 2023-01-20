@@ -20,7 +20,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include "load_structs.h"
 
+#define SIZE 0.69
 
 
 //----------------------------------------------------------------------------------
@@ -28,67 +30,6 @@
 //----------------------------------------------------------------------------------
 int screenWidth = 1280;
 int screenHeight = 720;
-
-typedef struct Cards {
-    Texture2D cA;
-    Texture2D c2;
-    Texture2D c3;
-    Texture2D c4;
-    Texture2D c5;
-    Texture2D c6;
-    Texture2D c7;
-    Texture2D c8;
-    Texture2D c9;
-    Texture2D c10;
-    Texture2D cK;
-    Texture2D cQ;
-    Texture2D cJ;
-
-    Texture2D hA;
-    Texture2D h2;
-    Texture2D h3;
-    Texture2D h4;
-    Texture2D h5;
-    Texture2D h6;
-    Texture2D h7;
-    Texture2D h8;
-    Texture2D h9;
-    Texture2D h10;
-    Texture2D hK;
-    Texture2D hJ;
-    Texture2D hQ;
-
-    Texture2D dA;
-    Texture2D d2;
-    Texture2D d3;
-    Texture2D d4;
-    Texture2D d5;
-    Texture2D d6;
-    Texture2D d7;
-    Texture2D d8;
-    Texture2D d9;
-    Texture2D d10;
-    Texture2D dK;
-    Texture2D dJ;
-    Texture2D dQ;
-
-    Texture2D sA;
-    Texture2D s2;
-    Texture2D s3;
-    Texture2D s4;
-    Texture2D s5;
-    Texture2D s6;
-    Texture2D s7;
-    Texture2D s8;
-    Texture2D s9;
-    Texture2D s10;
-    Texture2D sK;
-    Texture2D sJ;
-    Texture2D sQ;
-
-    Texture2D backfaceB;
-    Texture2D backfaceR;
-}Cards;
 
 typedef struct pozice {
     Vector2 K1;
@@ -117,6 +58,7 @@ int main()
     InitWindow(screenWidth, screenHeight, "Blackjack");
 
     Cards deck;
+
     deck.hA = LoadTexture("../img/hearts/Ace.png");
     deck.h2 = LoadTexture("../img/hearts/Two.png");
     deck.h3 = LoadTexture("../img/hearts/Three.png");
@@ -240,7 +182,7 @@ void UpdateDrawFrame(Cards Tcheckerboard, pozice stul)
     DrawText("Blackjack", 2*screenWidth/5, 2*screenHeight/5, 50, GOLD);
 /*
     DrawCircle(screenWidth/4, screenHeight/2, 50, DARKBROWN);
-DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
+    DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
     DrawCircle(3*screenWidth/4, screenHeight/2, 50, DARKBROWN);
     DrawText("O", 3*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
     DrawCircle(2*screenWidth/4, screenHeight/2, 50, DARKBROWN);
@@ -252,8 +194,8 @@ DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
 
 
 
-    DrawTextureEx(Tcheckerboard.cA, stul.K1, 0, 0.69, WHITE);
-    DrawTextureEx(Tcheckerboard.backfaceR, stul.K2, 0,0.69 , WHITE);
+    DrawTextureEx(Tcheckerboard.cA, stul.K1, 0, SIZE, WHITE);
+    DrawTextureEx(Tcheckerboard.backfaceR, stul.K2, 0,SIZE , WHITE);
 
     DrawTextureEx(Tcheckerboard.backfaceB, stul.H1, 0 ,1 , WHITE);
     DrawTextureEx(Tcheckerboard.c9,stul.H2,0 ,1 , WHITE);
