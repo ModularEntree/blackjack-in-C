@@ -34,7 +34,9 @@
 int screenWidth = 1280;
 int screenHeight = 720;
 
-bool game = false;
+bool bGame = true; // Should be false, but for testing purposes it is true
+bool bHit = false;
+bool bStand = false;
 
 typedef struct pozice {
     Vector2 K1;
@@ -50,7 +52,7 @@ typedef struct pozice {
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards checkerboard, pozice stul);     // Update and Draw one frame
+void UpdateDrawFrame(Cards checkerboard, pozice stul, Rectangle hit, Rectangle stand);     // Update and Draw one frame
 
 //----------------------------------------------------------------------------------
 // Main Enry Point
@@ -134,7 +136,7 @@ int main()
 
     //--------------------------------------------------------------------------------------
 
-    Image Icon = LoadImage("../img/Blackjack-icon.png");
+    Image Icon = LoadImage("../img/kicko.png");
 
     SetWindowIcon(Icon);
 
@@ -143,6 +145,10 @@ int main()
     SetTargetFPS(60);   // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
+
+    Rectangle stand = {screenWidth-120-25, 2.2*screenHeight/5-12.5, 120, 50, (Color){0,0,0,100}};
+    Rectangle hit = {(0*screenWidth)+25, 2.2*screenHeight/5-12.5, 120, 50, (Color){0,0,0,100}};
+
     system("echo amogus říká: \"Ahoj\"");
 
     // Main game loop
@@ -150,10 +156,20 @@ int main()
     {
 
         if(IsKeyPressed(KEY_SPACE)){
-            game = true;
+            bGame = true;
             }
 
-        UpdateDrawFrame(deck, stul);
+        if(IsKeyPressed(KEY_H) && bStand == false){
+            bStand = false;
+            bHit = true;
+            }
+
+        if(IsKeyPressed(KEY_S) && bHit == false){
+            bHit = false;
+            bStand = true;
+            }
+
+        UpdateDrawFrame(deck, stul, hit, stand);
     }
 
     // De-Initialization
@@ -169,7 +185,7 @@ int main()
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards deck, pozice stul)
+void UpdateDrawFrame(Cards deck, pozice stul, Rectangle hit, Rectangle stand)
 {
 
     // Update
@@ -183,10 +199,25 @@ void UpdateDrawFrame(Cards deck, pozice stul)
 
     ClearBackground(DARKERGREEN);
 
-    if(game)
+    if(bGame)
     {
-    DrawText("Blackjack", 2*screenWidth/5, 2*screenHeight/5, 50, GOLD);
+    DrawText("Blackjack", screenWidth/2- MeasureText("Blackjack", 50)/2, 1.8*screenHeight/5, 50, GOLD);
+    DrawRectangleRec(hit, (Color){0,0,0,100});
+    DrawText("Hit", (0*screenWidth)+25+60- MeasureText("Hit", 30)/2, 2.2*screenHeight/5, 30, GOLD);
+    DrawText("OR", screenWidth/2-MeasureText("OR", 30)/2, 2.2*screenHeight/5, 30, GOLD);
+    DrawRectangleRec(stand, (Color){0,0,0,100});
+    DrawText("Stand", (screenWidth- MeasureText("Stand", 30)/2)-25-60, 2.2*screenHeight/5, 30, GOLD);
 
+    if(bHit)
+    {
+        DrawText("You hit!", screenWidth/2- MeasureText("You hit!", 30)/2, 2.2*screenHeight/5+50, 30, GOLD);
+        bHit = false;
+    }
+    else if(bStand)
+    {
+        DrawText("You stand!", screenWidth/2- MeasureText("You stand!", 30)/2, 2.2*screenHeight/5+50, 30, GOLD);
+        bStand = false;
+    }
 
     DrawTextureEx(deck.cA, stul.K1, 0, SCALE, WHITE);
     DrawTextureEx(deck.backfaceR, stul.K2, 0,SCALE , WHITE);
