@@ -22,7 +22,10 @@
 #include <unistd.h>
 #include "load_structs.h"
 
-#define SIZE 0.69
+
+#define DARKERGREEN CLITERAL(Color){ 0, 84, 31, 255 }     // Darker Green
+
+#define SCALE 0.69
 
 
 //----------------------------------------------------------------------------------
@@ -30,6 +33,8 @@
 //----------------------------------------------------------------------------------
 int screenWidth = 1280;
 int screenHeight = 720;
+
+bool game = false;
 
 typedef struct pozice {
     Vector2 K1;
@@ -40,7 +45,7 @@ typedef struct pozice {
     Vector2 H3;
 }pozice;
 
-const char *cards[13] = {"ace_H", "Two_H", "Three_H", "Four_H", "Five_H", "Six_H", "Seven_H", "Eight_H", "Nine_H", "Ten_H", "Jack_H", "Queen_H", "King_H"};
+//const char *cards[13] = {"ace_H", "Two_H", "Three_H", "Four_H", "Five_H", "Six_H", "Seven_H", "Eight_H", "Nine_H", "Ten_H", "Jack_H", "Queen_H", "King_H"};
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
@@ -144,10 +149,9 @@ int main()
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
 
-        /*if(IsKeyPressed(KEY_SPACE)){
-            UpdateTexture(deck.backfaceB, LoadImageColors(LoadImageFromTexture(deck.cA)));
-            UpdateTexture(deck.backfaceR, LoadImageColors(LoadImage("../img/backfaceB.png")));
-        }*/
+        if(IsKeyPressed(KEY_SPACE)){
+            game = true;
+            }
 
         UpdateDrawFrame(deck, stul);
     }
@@ -165,7 +169,7 @@ int main()
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards Tcheckerboard, pozice stul)
+void UpdateDrawFrame(Cards deck, pozice stul)
 {
 
     // Update
@@ -179,31 +183,26 @@ void UpdateDrawFrame(Cards Tcheckerboard, pozice stul)
 
     ClearBackground(DARKERGREEN);
 
+    if(game)
+    {
     DrawText("Blackjack", 2*screenWidth/5, 2*screenHeight/5, 50, GOLD);
-/*
-    DrawCircle(screenWidth/4, screenHeight/2, 50, DARKBROWN);
-    DrawText("O", screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
-    DrawCircle(3*screenWidth/4, screenHeight/2, 50, DARKBROWN);
-    DrawText("O", 3*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
-    DrawCircle(2*screenWidth/4, screenHeight/2, 50, DARKBROWN);
-
-    DrawRectangleRounded((Rectangle){screenWidth/2-100, screenHeight/2-25, 200, 50}, 0.5, 10, DARKBROWN);
-
-    DrawText("W", 2*screenWidth/4-15, screenHeight/2-20, 45, BEIGE);
-*/
 
 
+    DrawTextureEx(deck.cA, stul.K1, 0, SCALE, WHITE);
+    DrawTextureEx(deck.backfaceR, stul.K2, 0,SCALE , WHITE);
 
-    DrawTextureEx(Tcheckerboard.cA, stul.K1, 0, SIZE, WHITE);
-    DrawTextureEx(Tcheckerboard.backfaceR, stul.K2, 0,SIZE , WHITE);
+    DrawTextureEx(deck.backfaceB, stul.H1, 0 ,1 , WHITE);
+    DrawTextureEx(deck.c9,stul.H2,0 ,1 , WHITE);
+    DrawTextureEx(deck.cK,stul.H3,0 ,1 , WHITE);
 
-    DrawTextureEx(Tcheckerboard.backfaceB, stul.H1, 0 ,1 , WHITE);
-    DrawTextureEx(Tcheckerboard.c9,stul.H2,0 ,1 , WHITE);
-    DrawTextureEx(Tcheckerboard.cK,stul.H3,0 ,1 , WHITE);
-
-
-
-
+    }
+    else
+    {
+        DrawTextureEx(deck.backfaceR, (Vector2) {screenWidth/2-(SCALE*deck.backfaceB.width/2)+90, screenHeight/2-(SCALE*deck.backfaceB.height/2)-105}, 25, SCALE, WHITE);
+        DrawTextureEx(deck.backfaceB, (Vector2) {screenWidth/2-(SCALE*deck.backfaceB.width/2)-90, screenHeight/2-(SCALE*deck.backfaceB.height/2)-55}, -25, SCALE, WHITE);
+        DrawText("Blackjack", 2*screenWidth/5, 2.55*screenHeight/5, 50, GOLD);
+        DrawText("Press space to start", screenWidth/2 - MeasureText("Press space to start", 50)/2, 2.55*screenHeight/5+50, 50, GOLD);
+    }
 
         EndDrawing();
     //----------------------------------------------------------------------------------
