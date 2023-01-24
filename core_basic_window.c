@@ -52,7 +52,7 @@ typedef struct pozice {
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards checkerboard, pozice stul, Rectangle hit, Rectangle stand);     // Update and Draw one frame
+void UpdateDrawFrame(Cards checkerboard, pozice stul, Rectangle hit, Rectangle stand, Rectangle start);     // Update and Draw one frame
 
 //----------------------------------------------------------------------------------
 // Main Enry Point
@@ -148,17 +148,22 @@ int main()
 
     Rectangle stand = {screenWidth-120-25, 2.2*screenHeight/5-12.5, 120, 50, (Color){0,0,0,100}};
     Rectangle hit = {(0*screenWidth)+25, 2.2*screenHeight/5-12.5, 120, 50, (Color){0,0,0,100}};
+    Rectangle start = {(screenWidth/2)-375, screenHeight/2-250, 750, 450, (Color){0,0,0,0}};
 
     system("echo amogus říká: \"Ahoj\"");
 
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-
+        // Start game
         if(IsKeyPressed(KEY_SPACE)){
             bGame = true;
             }
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), start)){
+            bGame = true;
+        }
 
+        // Hit controls
         if(IsKeyPressed(KEY_H) && bStand == false){
             bStand = false;
             bHit = true;
@@ -168,6 +173,7 @@ int main()
             bHit = true;
             }
 
+        // Stand controls
         if(IsKeyPressed(KEY_S) && bHit == false){
             bHit = false;
             bStand = true;
@@ -177,7 +183,7 @@ int main()
             bStand = true;
         }
 
-        UpdateDrawFrame(deck, stul, hit, stand);
+        UpdateDrawFrame(deck, stul, hit, stand, start);
     }
 
     // De-Initialization
@@ -193,7 +199,7 @@ int main()
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards deck, pozice stul, Rectangle hit, Rectangle stand)
+void UpdateDrawFrame(Cards deck, pozice stul, Rectangle hit, Rectangle stand, Rectangle start)
 {
 
     // Update
@@ -241,6 +247,7 @@ void UpdateDrawFrame(Cards deck, pozice stul, Rectangle hit, Rectangle stand)
         DrawTextureEx(deck.backfaceB, (Vector2) {screenWidth/2-(SCALE*deck.backfaceB.width/2)-90, screenHeight/2-(SCALE*deck.backfaceB.height/2)-55}, -25, SCALE, WHITE);
         DrawText("Blackjack", 2*screenWidth/5, 2.55*screenHeight/5, 50, GOLD);
         DrawText("Press space to start", screenWidth/2 - MeasureText("Press space to start", 50)/2, 2.55*screenHeight/5+50, 50, GOLD);
+        DrawRectangleRec(start, (Color){0,0,0,0});
     }
 
         EndDrawing();
