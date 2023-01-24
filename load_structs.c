@@ -1,7 +1,7 @@
 //
 // Created by Gregstr on 19/01/2023.
 //
-
+/*
 #include "load_structs.h"
 
 
@@ -67,4 +67,4 @@ struct Cards loadStructs(Cards deck)
     deck.backfaceB = LoadTexture("../img/backs/kittyback-blue.png");
     deck.backfaceR = LoadTexture("../img/backs/kittyback-red.png");
 
-}
+}*/

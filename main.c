@@ -4,66 +4,28 @@
 #include <string.h>
 #include <stdbool.h>
 #include <locale.h>
+#include "gui_window.h"
+#include "main.h"
 //#include <raylib.h>
-#define MAX_SIZE 22
-#define null ((void*)0)
 
-typedef struct Card{
-    int num;
-    char id, name[MAX_SIZE];
-} card;
+int HandSumMe, HandSumHouse;
+int HandMe[MAX_SIZE] = {0}, HandHouse[MAX_SIZE] = {0};
+int cardNumMe = 0, cardNumHouse = 0;
 
-typedef struct Localization{
-    char error_hs[29], error_unk[24], option_hs[16], option_win[12], option_lose[13];
-} localization;
+bool bWin;
+bool bLose;
 
 card ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king;
 localization czech, english, def;
 
-int hit();
-int sum(int *p);
 
-localization local();
-bool hitOrStand ();
 /*
 int main() {
-    srand(time(null)); // maybe change the seed?
-    ace.num =  1;
-    ace.id = 'A';
-    two.num =  2;
-    two.id = '2';
-    three.num =  3;
-    three.id = '3';
-    four.num =  4;
-    four.id = '4';
-    five.num =  5;
-    five.id = '5';
-    six.num =  6;
-    six.id = '6';
-    seven.num =  7;
-    seven.id = '7';
-    eight.num =  8;
-    eight.id = '8';
-    nine.num =  9;
-    nine.id = '9';
-    ten.num =  10;
-    ten.id = 'X';
-    jack.num =  10;
-    jack.id = 'J';
-    queen.num =  10;
-    queen.id = 'Q';
-    king.num =  10;
-    king.id = 'K';
     // start conf
     def = local();
     // GAME - in future in function
     int i, HandSumMe, HandSumHouse, cardNumMe = 0, cardNumHouse = 0;
     // "nulling" hands and giving them first two cards
-    int HandMe[MAX_SIZE], HandHouse[MAX_SIZE];
-    for (i = 0; i<=MAX_SIZE;i++)
-        HandMe[i] = 0;
-    for (i = 0; i<=MAX_SIZE;i++)
-        HandHouse[i] = 0;
     HandMe[cardNumMe++] = hit();
     printf("%d\n", HandMe[--cardNumMe]);
     HandMe[cardNumMe++] = hit();
@@ -101,17 +63,29 @@ int main() {
     }
 
     return 0;
-}
+}*/
 
 int hit() {
     return rand() % (10-1+1) + 1;
+}
+
+void Hit()
+{
+    bPlayerTurn = false;
+    HandMe[cardNumMe] = hit();
+    cardNumMe++;
+}
+
+void Stand()
+{
+    bPlayerTurn = false;
 }
 
 int sum(int *hand) {
     int sum = 0, i, exc;
     for (i =0;i<=MAX_SIZE;(hand++)&&(i++)) {
         if ((sum<=21)&&(*hand==1)) {
-            exc = 11; //this is temporary solution - i should make a recursive function to do this
+            exc = 11; //this is temporary solution - I should make a recursive function to do this
         }
         else
             exc = *hand;
@@ -119,6 +93,35 @@ int sum(int *hand) {
     }
     return sum;
 }
+
+void Start()
+{
+    static bool initialized = false;
+    while(!initialized) {
+        def = local();
+        // GAME - in future in function
+        int i;
+        // "nulling" hands and giving them first two cards
+        HandMe[cardNumMe++] = hit();
+        printf("%d\n", HandMe[--cardNumMe]);
+        cardNumMe++;
+        HandMe[cardNumMe++] = hit();
+        printf("%d\n", HandMe[--cardNumMe]);
+        cardNumMe++;
+        HandHouse[cardNumHouse++] = hit();
+        printf("%d\n", HandHouse[--cardNumHouse]);
+        cardNumHouse++;
+        HandHouse[cardNumHouse++] = hit();
+        printf("%d\n", HandHouse[--cardNumHouse]);
+        cardNumHouse++;
+        // sum of hands for later start-win situation
+        HandSumMe = sum(HandMe);
+        HandSumHouse = sum(HandHouse);
+
+        initialized = true;
+    }
+}
+
 
 bool hitOrStand () {
     int stringlen;
@@ -192,7 +195,7 @@ bool hitOrStand () {
     return null;
 }
 
-// i am not sure, if this will work, 'cause i am not on linux. must try it later
+// I am not sure, if this will work, 'cause I am not on linux. must try it later
 #ifdef __linux__ //outdated
 localization local() {
     if (setlocale(LC_ALL, "") == null) {
@@ -244,7 +247,7 @@ localization local() {
 localization local() {
     //bool czech = false;
     if (!strcmp(setlocale(LC_ALL, ""), setlocale(LC_ALL, "Czech_Czechia.1250"))) {
-        // Czech localization (cause i am czech, lol)
+        // Czech localization (cause I am czech, lol)
         // structs
         strcpy(ace.name, "Eso");
         strcpy(two.name, "Dvojka");
@@ -292,5 +295,4 @@ localization local() {
         return english;
     }
 }
-#
- */
+#endif
