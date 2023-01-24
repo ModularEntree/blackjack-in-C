@@ -14,6 +14,9 @@ extern int HandMe[MAX_SIZE], HandHouse[MAX_SIZE];
 extern int cardNumMe, cardNumHouse;
 extern card ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king;
 extern localization czech, english, def;
+int HandMeLocal[MAX_SIZE][2] = {(int) NULL}, HandHouseLocal[MAX_SIZE][2] = {(int) NULL};
+
+int offset = 0;
 
 //----------------------------------------------------------------------------------
 // Global Variables Definition
@@ -50,6 +53,12 @@ int main() {
     srand(time(NULL));
 
     InitWindow(screenWidth, screenHeight, "Blackjack");
+
+    for (int i = 0; i < MAX_SIZE; ++i) {
+        HandHouseLocal[i][0] = 0;
+        HandMeLocal[i][0] = 0;
+    }
+
 
     Cards deck;
 
@@ -245,7 +254,8 @@ void printout(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Text
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
-
+            HandSumHouse = sum(HandHouse);
+            HandSumMe = sum(HandMe);
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
@@ -270,11 +280,17 @@ void printout(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Text
             {
                 DrawText("You win!", screenWidth / 2 - MeasureText("You win!", 50) / 2, 1.8 * screenHeight / 5, 50,
                          GOLD);
+                DrawText(TextFormat("Your score: %d", HandSumMe), screenWidth / 2 - MeasureText(TextFormat("Your score: %d", HandSumMe), 30) / 2, 1.8 * screenHeight / 5 + 50, 30,
+                         GOLD);
+                DrawText(TextFormat("Dealer's score: %d", HandSumHouse), screenWidth / 2 - MeasureText(TextFormat("Dealer's score: %d", HandSumHouse), 30) / 2, 1.8 * screenHeight / 5 + 100, 30, GOLD);
             }
             else if(bLose)
             {
                 DrawText("You lose!", screenWidth / 2 - MeasureText("You lose!", 50) / 2, 1.8 * screenHeight / 5, 50,
                          GOLD);
+                DrawText(TextFormat("Your score: %d", HandSumMe), screenWidth / 2 - MeasureText(TextFormat("Your score: %d", HandSumMe), 30) / 2, 1.8 * screenHeight / 5 + 50, 30,
+                         GOLD);
+                DrawText(TextFormat("Dealer's score: %d", HandSumHouse), screenWidth / 2 - MeasureText(TextFormat("Dealer's score: %d", HandSumHouse), 30) / 2, 1.8 * screenHeight / 5 + 100, 30, GOLD);
             }
             else {
                 DrawText("Blackjack", screenWidth / 2 - MeasureText("Blackjack", 50) / 2, 1.8 * screenHeight / 5, 50,
@@ -301,12 +317,30 @@ void printout(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Text
 
                 for (int i = 0; i <= cardNumMe-1; i++)
                 {
-                    DrawTextureEx(aDeck[HandMe[i]-1], (Vector2) {(i+2)*screenWidth / (3+cardNumMe) - aDeck[HandMe[i]-1].width / 2, 450}, 0, 1,WHITE);
+                    if(HandMeLocal[i][0]==0)
+                    {
+                        if(HandHouse[i]==10)
+                        {
+                            offset = rand()%4;
+                        }
+                        HandMeLocal[i][1] = HandMe[i]-1+((rand()%4)*13)+offset;
+                        HandMeLocal[i][0] = 1;
+                    }
+                    DrawTextureEx(aDeck[HandMeLocal[i][1]], (Vector2) {(i+2)*screenWidth / (3+cardNumMe) - aDeck[HandMe[i]-1].width / 2, 450}, 0, 1,WHITE);
                 }
 
                 for (int i = 0; i <= cardNumHouse-1; i++)
                 {
-                    DrawTextureEx(aDeck[HandHouse[i]-1], (Vector2) {(i+2)*screenWidth / (3+cardNumHouse) - SCALE*(aDeck[HandHouse[i]-1].width / 2), 50}, 0, SCALE,WHITE);
+                    if(HandHouseLocal[i][0]==0)
+                    {
+                        if(HandHouse[i]==10)
+                        {
+                            offset = rand()%4;
+                        }
+                        HandHouseLocal[i][1] = HandHouse[i]-1+((rand()%4)*13)+offset;
+                        HandHouseLocal[i][0] = 1;
+                    }
+                    DrawTextureEx(aDeck[HandHouseLocal[i][1]], (Vector2) {(i+2)*screenWidth / (3+cardNumHouse) - SCALE*(aDeck[HandHouse[i]-1].width / 2), 50}, 0, SCALE,WHITE);
                 }
 /*
                 DrawTextureEx(deck.cA, stul.K1, 0, SCALE, WHITE);
@@ -330,12 +364,12 @@ void printout(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Text
             DrawRectangleRec(start, (Color) {0, 0, 0, 0});
         }
 
-        if(bWin || bLose)
+        /*if(bWin || bLose)
         {
             DrawText("Press space to play again", screenWidth / 2 - MeasureText("Press space to play again", 50) / 2,
                      2.55 * screenHeight / 5 + 50, 50, GOLD);
             DrawRectangleRec(start, (Color) {0, 0, 0, 0});
-        }
+        }*/
 
         EndDrawing();
         //----------------------------------------------------------------------------------
