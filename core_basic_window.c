@@ -163,11 +163,19 @@ int main()
             bStand = false;
             bHit = true;
             }
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), hit) && bStand == false){
+            bStand = false;
+            bHit = true;
+            }
 
         if(IsKeyPressed(KEY_S) && bHit == false){
             bHit = false;
             bStand = true;
             }
+        if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), stand) && bHit == false){
+            bHit = false;
+            bStand = true;
+        }
 
         UpdateDrawFrame(deck, stul, hit, stand);
     }
