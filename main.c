@@ -9,7 +9,7 @@
 //#include <raylib.h>
 
 int HandSumMe, HandSumHouse;
-int HandMe[MAX_SIZE] = {0}, HandHouse[MAX_SIZE] = {0};
+int HandMe[MAX_SIZE] = {(int) NULL}, HandHouse[MAX_SIZE] = {(int) NULL};
 int cardNumMe = 0, cardNumHouse = 0;
 
 bool bWin;
@@ -82,12 +82,13 @@ void Hit()
         bPlayerTurn = true;
 }
 
-void Stand()
+void Stand(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Texture2D aDeck[TEXTURE_COUNT])
 {
     bPlayerTurn = false;
     for (true;true;true) {
         HandHouse[cardNumHouse] = hit();
         cardNumHouse++;
+        printout(deck, rHit, stand, start, aDeck);
         if ((sum(HandHouse)<=21)&&(sum(HandHouse)>=sum(HandMe))) {
             puts(def.option_lose);
             bWin = true;
@@ -98,6 +99,11 @@ void Stand()
             break;
         }
     }
+}
+
+void HouseTurn()
+{
+    bPlayerTurn = true;
 }
 
 int sum(int *hand) {

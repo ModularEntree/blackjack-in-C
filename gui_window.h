@@ -13,6 +13,8 @@
 
 #define SCALE 0.69
 
+#define TEXTURE_COUNT 52
+
 typedef struct Cards {
     Texture2D cA;
     Texture2D c2;
@@ -73,3 +75,5 @@ typedef struct Cards {
     Texture2D backfaceB;
     Texture2D backfaceR;
 }Cards;
+
+void printout(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Texture2D aDeck[TEXTURE_COUNT]);

@@ -16,7 +16,7 @@ int hit();
 int sum(int *p);
 
 void Hit();
-void Stand();
+void Stand(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Texture2D aDeck[TEXTURE_COUNT]);
 void Start();
 
 typedef struct Card{

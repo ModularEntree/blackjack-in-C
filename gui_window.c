@@ -40,7 +40,7 @@ typedef struct pozice {
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
-void UpdateDrawFrame(Cards checkerboard, pozice stul, Rectangle hit, Rectangle stand, Rectangle start);     // Update and Draw one frame
+void UpdateDrawFrame(Cards deck, Rectangle hit, Rectangle stand, Rectangle start, Texture2D aDeck[TEXTURE_COUNT]);     // Update and Draw one frame
 
 //----------------------------------------------------------------------------------
 // Main Enry Point
@@ -148,6 +148,8 @@ int main() {
     king.num = 10;
     king.id = 'K';
 
+    Texture2D aDeck[TEXTURE_COUNT] = {deck.hA, deck.h2, deck.h3, deck.h4, deck.h5, deck.h6, deck.h7, deck.h8, deck.h9, deck.h10, deck.hJ, deck.hQ, deck.hK, deck.cA, deck.c2, deck.c3, deck.c4, deck.c5, deck.c6, deck.c7, deck.c8, deck.c9, deck.c10, deck.cJ, deck.cQ, deck.cK, deck.dA, deck.d2, deck.d3, deck.d4, deck.d5, deck.d6, deck.d7, deck.d8, deck.d9, deck.d10, deck.dJ, deck.dQ, deck.dK, deck.sA, deck.s2, deck.s3, deck.s4, deck.s5, deck.s6, deck.s7, deck.s8, deck.s9, deck.s10, deck.sJ, deck.sQ, deck.sK};
+
     //--------------------------------------------------------------------------------------
 
     Image Icon = LoadImage("../img/kicko.png");
@@ -208,16 +210,18 @@ int main() {
             }
             else if (bStand == true && bPlayerTurn == true)
             {
-                Stand();
+                Stand(deck, hit, stand, start, aDeck);
             }
 
 
-            UpdateDrawFrame(deck, stul, hit, stand, start);
+            UpdateDrawFrame(deck, hit, stand, start, aDeck);
         }
 
     }
         // De-Initialization
         //--------------------------------------------------------------------------------------
+        for (int i = 0; i < TEXTURE_COUNT; i++)
+            UnloadTexture(aDeck[i]);
         //UnloadTexture(deck.cA);
         CloseWindow();        // Close window and OpenGL context
         //--------------------------------------------------------------------------------------
@@ -226,10 +230,15 @@ int main() {
         return 0;
 }
 
+void printout(Cards deck, Rectangle rHit, Rectangle stand, Rectangle start, Texture2D aDeck[TEXTURE_COUNT])
+{
+    UpdateDrawFrame(deck, rHit, stand, start, aDeck);
+}
+
 //----------------------------------------------------------------------------------
 // Module Functions Definition
 //----------------------------------------------------------------------------------
-    void UpdateDrawFrame(Cards deck, pozice stul, Rectangle hit, Rectangle stand, Rectangle start)
+    void UpdateDrawFrame(Cards deck, Rectangle hit, Rectangle stand, Rectangle start, Texture2D aDeck[TEXTURE_COUNT])
     {
 
         // Update
@@ -241,33 +250,73 @@ int main() {
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
+        if(bLose)
+        {
+            DrawText("You lose!", screenWidth / 2 - MeasureText("You lose!", 50) / 2, 1.8 * screenHeight / 5, 50,
+                     GOLD);
+            sleep(3);
+        }
+        else if(bWin)
+        {
+            DrawText("You win!", screenWidth / 2 - MeasureText("You win!", 50) / 2, 1.8 * screenHeight / 5, 50,
+                     GOLD);
+            sleep(3);
+        }
+
         ClearBackground(DARKERGREEN);
 
         if (bGame) {
-            DrawText("Blackjack", screenWidth / 2 - MeasureText("Blackjack", 50) / 2, 1.8 * screenHeight / 5, 50, GOLD);
-            DrawRectangleRec(hit, (Color) {0, 0, 0, 100});
-            DrawText("Hit", (0 * screenWidth) + 25 + 60 - MeasureText("Hit", 30) / 2, 2.2 * screenHeight / 5, 30, GOLD);
-            DrawText("OR", screenWidth / 2 - MeasureText("OR", 30) / 2, 2.2 * screenHeight / 5, 30, GOLD);
-            DrawRectangleRec(stand, (Color) {0, 0, 0, 100});
-            DrawText("Stand", (screenWidth - MeasureText("Stand", 30) / 2) - 25 - 60, 2.2 * screenHeight / 5, 30, GOLD);
-
-            if (bHit) {
-                DrawText("You hit!", screenWidth / 2 - MeasureText("You hit!", 30) / 2, 2.2 * screenHeight / 5 + 50, 30,
+            if(bWin)
+            {
+                DrawText("You win!", screenWidth / 2 - MeasureText("You win!", 50) / 2, 1.8 * screenHeight / 5, 50,
                          GOLD);
-                bHit = false;
-            } else if (bStand) {
-                DrawText("You stand!", screenWidth / 2 - MeasureText("You stand!", 30) / 2, 2.2 * screenHeight / 5 + 50,
-                         30, GOLD);
-                bStand = false;
             }
+            else if(bLose)
+            {
+                DrawText("You lose!", screenWidth / 2 - MeasureText("You lose!", 50) / 2, 1.8 * screenHeight / 5, 50,
+                         GOLD);
+            }
+            else {
+                DrawText("Blackjack", screenWidth / 2 - MeasureText("Blackjack", 50) / 2, 1.8 * screenHeight / 5, 50,
+                         GOLD);
+                DrawRectangleRec(hit, (Color) {0, 0, 0, 100});
+                DrawText("Hit", (0 * screenWidth) + 25 + 60 - MeasureText("Hit", 30) / 2, 2.2 * screenHeight / 5, 30,
+                         GOLD);
+                DrawText("OR", screenWidth / 2 - MeasureText("OR", 30) / 2, 2.2 * screenHeight / 5, 30, GOLD);
+                DrawRectangleRec(stand, (Color) {0, 0, 0, 100});
+                DrawText("Stand", (screenWidth - MeasureText("Stand", 30) / 2) - 25 - 60, 2.2 * screenHeight / 5, 30,
+                         GOLD);
 
-            DrawTextureEx(deck.cA, stul.K1, 0, SCALE, WHITE);
-            DrawTextureEx(deck.backfaceR, stul.K2, 0, SCALE, WHITE);
+                if (bHit) {
+                    DrawText("You hit!", screenWidth / 2 - MeasureText("You hit!", 30) / 2, 2.2 * screenHeight / 5 + 50,
+                             30,
+                             GOLD);
+                    bHit = false;
+                } else if (bStand) {
+                    DrawText("You stand!", screenWidth / 2 - MeasureText("You stand!", 30) / 2,
+                             2.2 * screenHeight / 5 + 50,
+                             30, GOLD);
+                    bStand = false;
+                }
 
-            DrawTextureEx(deck.backfaceB, stul.H1, 0, 1, WHITE);
-            DrawTextureEx(deck.c9, stul.H2, 0, 1, WHITE);
-            DrawTextureEx(deck.cK, stul.H3, 0, 1, WHITE);
+                for (int i = 0; i <= cardNumMe-1; i++)
+                {
+                    DrawTextureEx(aDeck[HandMe[i]-1], (Vector2) {(i+2)*screenWidth / (3+cardNumMe) - aDeck[HandMe[i]-1].width / 2, 450}, 0, 1,WHITE);
+                }
 
+                for (int i = 0; i <= cardNumHouse-1; i++)
+                {
+                    DrawTextureEx(aDeck[HandHouse[i]-1], (Vector2) {(i+2)*screenWidth / (3+cardNumHouse) - SCALE*(aDeck[HandHouse[i]-1].width / 2), 50}, 0, SCALE,WHITE);
+                }
+/*
+                DrawTextureEx(deck.cA, stul.K1, 0, SCALE, WHITE);
+                DrawTextureEx(deck.backfaceR, stul.K2, 0, SCALE, WHITE);
+
+                DrawTextureEx(deck.backfaceB, stul.H1, 0, 1, WHITE);
+                DrawTextureEx(deck.c9, stul.H2, 0, 1, WHITE);
+                DrawTextureEx(deck.cK, stul.H3, 0, 1, WHITE);
+                */
+            }
         } else {
             DrawTextureEx(deck.backfaceR, (Vector2) {screenWidth / 2 - (SCALE * deck.backfaceB.width / 2) + 90,
                                                      screenHeight / 2 - (SCALE * deck.backfaceB.height / 2) - 105}, 25,
@@ -277,6 +326,13 @@ int main() {
                           SCALE, WHITE);
             DrawText("Blackjack", 2 * screenWidth / 5, 2.55 * screenHeight / 5, 50, GOLD);
             DrawText("Press space to start", screenWidth / 2 - MeasureText("Press space to start", 50) / 2,
+                     2.55 * screenHeight / 5 + 50, 50, GOLD);
+            DrawRectangleRec(start, (Color) {0, 0, 0, 0});
+        }
+
+        if(bWin || bLose)
+        {
+            DrawText("Press space to play again", screenWidth / 2 - MeasureText("Press space to play again", 50) / 2,
                      2.55 * screenHeight / 5 + 50, 50, GOLD);
             DrawRectangleRec(start, (Color) {0, 0, 0, 0});
         }
