@@ -74,11 +74,30 @@ void Hit()
     bPlayerTurn = false;
     HandMe[cardNumMe] = hit();
     cardNumMe++;
+    if (sum(HandMe)>21) {
+        puts(def.option_lose);
+        bLose = true;
+    }
+    else
+        bPlayerTurn = true;
 }
 
 void Stand()
 {
     bPlayerTurn = false;
+    for (true;true;true) {
+        HandHouse[cardNumHouse] = hit();
+        cardNumHouse++;
+        if ((sum(HandHouse)<=21)&&(sum(HandHouse)>=sum(HandMe))) {
+            puts(def.option_lose);
+            bWin = true;
+            break;
+        } else {
+            bLose = true;
+            puts(def.option_win);
+            break;
+        }
+    }
 }
 
 int sum(int *hand) {
@@ -182,8 +201,9 @@ bool hitOrStand () {
                 return false;
             else if(!strcmp(HOS, "stand."))
                 return false;
-            else
+            else {
                 puts(def.error_hs);
+            }
             break;
         }
         default: {
